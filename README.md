@@ -12,7 +12,7 @@
     $ cd mir-kiosk-pyside2-example
     ```
 3. building the snap:
-    ```
+    ```sh
     $ snapcraft --use-lxd
     ```
 
@@ -28,5 +28,8 @@
     $ snap install --dangerous ./mir-kiosk-pyside2-example_0.1_amd64.snap
     ```
 
+## Screenshot
+ 
+![Screenshot](imgs/kiosk_pyside2_ex.PNG)
 
-
+ 
