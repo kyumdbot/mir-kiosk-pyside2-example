@@ -1,0 +1,110 @@
+name: mir-kiosk-pyside2-example
+version: '0.1'
+summary: PySide2 example kiosk
+description: PySide2 example kiosk, using Wayland
+base: core20
+confinement: strict
+grade: devel
+
+apps:
+  daemon:
+    command-chain:
+      - bin/run-daemon
+      - bin/wayland-launch
+    command: bin/mir-kiosk-pyside2-example
+    daemon: simple
+    restart-condition: always
+  
+  mir-kiosk-pyside2-example:
+    command-chain:
+      - bin/wayland-launch
+    command: bin/mir-kiosk-pyside2-example
+
+plugs:
+  opengl:
+  wayland:
+
+layout:
+  /etc/glvnd:
+    bind: $SNAP/etc/glvnd
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /etc/xdg:
+    bind: $SNAP/etc/xdg
+  /usr/share/X11/xkb:
+    bind: $SNAP/usr/share/X11/xkb
+  /usr/share/glvnd:
+    bind: $SNAP/usr/share/glvnd
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+
+environment:
+  PYTHONPATH: $SNAP/pyside/
+  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}:${SNAP}/pyside/PySide2/Qt/lib:${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/
+  XCOMPOSEFILE: $SNAP/usr/share/X11/locale/en_US.UTF-8/Compose
+  # Qt Platform to Wayland
+  QT_QPA_PLATFORM: wayland
+  QT_DEBUG_PLUGINS: 1
+
+parts:
+  mir-kiosk-pyside2-example:
+    plugin: python
+    source: .
+
+  pyside2:
+    plugin: nil
+    override-build: |
+      snapcraftctl build
+      mkdir -p ${SNAPCRAFT_PART_INSTALL}/pyside
+      echo "Get latest release..."
+      pip3 install --no-cache-dir pyside2 -t ${SNAPCRAFT_PART_INSTALL}/pyside
+      rm -r ${SNAPCRAFT_PART_INSTALL}/pyside/PySide2/examples
+    build-packages:
+      - python3-pip
+      - wget
+      - jq
+    stage-packages:
+      - libnss3
+      - libxcomposite1
+      - libxcursor1
+      - libxtst6
+      - libxrandr2
+      - libasound2
+      - libglu1-mesa
+      - libgles2-mesa
+      - fontconfig
+      - libxkbcommon0
+      - libxkbcommon-x11-0
+      - libxi6
+      - libegl1
+      - shared-mime-info
+      - libgdk-pixbuf2.0-0
+      - locales-all
+      - libxslt1.1
+      - xfonts-base
+      - xfonts-scalable
+      - libxcb-xinerama0
+      - libxcb-icccm4
+      - libxcb-image0
+      - libxcb-keysyms1
+      - libxcb-randr0
+      - libxcb-render-util0
+      - libxcb-shape0
+      - libwayland-cursor0
+
+  mesa:
+    plugin: nil
+    stage-packages:
+      - libgl1-mesa-dri
+      - libwayland-egl1-mesa
+      - libglu1-mesa
+    
+  mir-kiosk-snap-launch:
+    plugin: dump
+    source: https://github.com/MirServer/mir-kiosk-snap-launch.git
+    override-build: $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland
+    stage-packages:
+      - inotify-tools
+
