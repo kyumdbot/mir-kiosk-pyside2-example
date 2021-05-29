@@ -1,4 +1,4 @@
-# PySide2 app example on Mir-kiosk
+# PySide2 example on Mir-kiosk
 
 ## Build
 
