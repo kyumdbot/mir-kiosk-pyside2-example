@@ -1,0 +1,32 @@
+# PySide2 app example on Mir-kiosk
+
+## Build
+
+1. install snapcraft:
+    ```sh
+    $ sudo snap install snapcraft --classic
+    ```
+2. download this repo:
+    ```sh
+    $ git clone https://github.com/kyumdbot/mir-kiosk-pyside2-example.git
+    $ cd mir-kiosk-pyside2-example
+    ```
+3. building the snap:
+    ```
+    $ snapcraft --use-lxd
+    ```
+
+## Install to Ubuntu Core 20
+
+1. login to your Ubuntu Core Device, and install mir-kiosk:
+    ```sh
+    $ snap install mir-kiosk
+    ```
+2. copy mir-kiosk-pyside2-example_0.1_amd64.snap to your Ubuntu Core Device.
+3. install mir-kiosk-pyside2-example_0.1_amd64.snap:
+    ```sh
+    $ snap install --dangerous ./mir-kiosk-pyside2-example_0.1_amd64.snap
+    ```
+
+
+
