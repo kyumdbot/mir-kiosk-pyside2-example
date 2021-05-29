@@ -16,7 +16,7 @@
     $ snapcraft --use-lxd
     ```
 
-## Install to Ubuntu Core 20
+## Install example app to Ubuntu Core 20
 
 1. login to your Ubuntu Core Device, and install mir-kiosk:
     ```sh
